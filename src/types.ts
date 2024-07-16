@@ -4,6 +4,11 @@ export type Diagnoses = {
     latin?: string;
 };
 
+export enum Gender {
+    male = 'male',
+    female = 'female'
+};
+
 export type Patient = {
     id: string;
     name: string;
