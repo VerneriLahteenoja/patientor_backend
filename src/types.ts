@@ -14,7 +14,7 @@ export type Patient = {
     name: string;
     dateOfBirth: string;
     ssn: string;
-    gender: string;
+    gender: string; //TODO: Change this to enum Gender
     occupation: string;
 };
 
