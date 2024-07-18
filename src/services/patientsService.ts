@@ -1,14 +1,18 @@
+import { v1 as uuid } from 'uuid';
+
 import data from "../data/patients";
-import { PatientNoSsn } from "../types";
+import { NewPatient, Patient, PatientNoSsn } from "../types";
 
 const patients: PatientNoSsn[] = data;
 
 export const getPatients = (): PatientNoSsn[] => {
-    return patients;
+  return patients;
 };
 
-export const addPatient = (): void => {
-    //TODO: handle parsing, validation and type predicates
-    // functions to handle are to be created in a separate module and service
-    console.log('addPatient called...');
+export const addPatient = (newPatient: NewPatient): Patient => {
+  // Mock version
+  // Does not save new patient anywhere
+  const id: string = uuid();
+  const addedPatient: Patient = { ...newPatient, id: id };
+  return addedPatient;
 };
