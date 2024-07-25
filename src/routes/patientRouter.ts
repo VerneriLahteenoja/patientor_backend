@@ -1,6 +1,6 @@
 import express from "express";
 
-import { addPatient, getPatients } from "../services/patientsService";
+import { addPatient, getPatients, getPatientById } from "../services/patientsService";
 import { toNewPatientEntry } from "../utils/parsers";
 
 const router = express.Router();
@@ -8,6 +8,14 @@ const router = express.Router();
 router.get('/', (_req, res) => {
   console.log('Fetching patients');
   return res.status(200).json(getPatients());
+});
+
+router.get('/:id', (req, res) => {
+  const foundPatient = getPatientById(req.params.id);
+  if (!foundPatient) {
+    return res.json(400).json({ error: 'No patient with given id exists'});
+  }
+  return res.status(200).json(foundPatient);
 });
 
 router.post('/', (req, res) => {

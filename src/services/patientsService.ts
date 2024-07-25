@@ -9,6 +9,12 @@ export const getPatients = (): PatientNoSsn[] => {
   return patients;
 };
 
+export const getPatientById = (id: string) => {
+  const patientToFind = data.find(patient => patient.id === id);
+  console.log(patientToFind);
+  return patientToFind;
+};
+
 export const addPatient = (newPatient: NewPatient): Patient => {
   // Mock version
   // Does not save new patient anywhere
