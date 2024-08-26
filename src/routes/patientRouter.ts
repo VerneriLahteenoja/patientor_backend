@@ -13,7 +13,7 @@ router.get('/', (_req, res) => {
 router.get('/:id', (req, res) => {
   const foundPatient = getPatientById(req.params.id);
   if (!foundPatient) {
-    return res.json(400).json({ error: 'No patient with given id exists'});
+    return res.json(400).json({ error: 'No patient with given id exists' });
   }
   return res.status(200).json(foundPatient);
 });
@@ -30,7 +30,27 @@ router.post('/', (req, res) => {
     }
     res.status(400).send(errorMsg);
   }
-  return res.status(400).json({ error: 'Something went wrong'});
+  return res.status(400).json({ error: 'Something went wrong' });
 });
+
+router.post('/:id/entries', (req, res) => {
+  const patient = getPatientById(req.params.id);
+  if (!patient) {
+    return res.json(400).json({ error: 'No patient with given id exists' })
+  }
+  try {
+    //TODO: Add validation for entry data
+    //TODO: Concat new entry to patient data if validation and parsing passes
+
+  } catch (error: unknown) {
+    let errorMsg = 'Error ';
+    if (error instanceof Error) {
+      errorMsg += error.message;
+    }
+    res.status(400).send(errorMsg);
+  }
+  return res.status(400).json({ error: 'Something went wrong' });
+})
+
 
 export default router;
