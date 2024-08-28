@@ -1,4 +1,4 @@
-import { Gender, NewPatient } from "../types";
+import { Gender, NewPatient, Diagnosis } from "../types";
 import { isString, isDate, isGender } from './validators';
 
 const parseName = (name: unknown): string => {
@@ -31,6 +31,13 @@ const parseOccupation = (occupation: unknown): string => {
     throw new Error('Incorrect or missing occupation');
   }
   return occupation;
+};
+
+const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> => {
+  if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
+    return [] as Array<Diagnosis['code']>;
+  }
+  return object.diagnosisCodes as Array<Diagnosis['code']>;
 };
 
 export const toNewPatientEntry = (object: unknown): NewPatient => {
