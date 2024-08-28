@@ -1,4 +1,4 @@
-import { Gender, NewPatient, Diagnosis } from "../types";
+import { Gender, NewPatient, Diagnosis, Patient } from "../types";
 import { isString, isDate, isGender } from './validators';
 
 const parseName = (name: unknown): string => {
@@ -56,3 +56,7 @@ export const toNewPatientEntry = (object: unknown): NewPatient => {
   }
   throw new Error('Incorrect data: some fields are missing');
 };
+
+//TODO: parse an entry object
+// Should return an entry object that can be concatinated to
+// existing array of entries in patient data
