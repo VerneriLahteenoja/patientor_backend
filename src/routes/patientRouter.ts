@@ -1,6 +1,6 @@
 import express from "express";
 
-import { addPatient, getPatients, getPatientById } from "../services/patientsService";
+import { addPatient, getPatients, getPatientById, addEntry } from "../services/patientsService";
 import { toNewPatientEntry } from "../utils/parsers";
 
 const router = express.Router();
@@ -41,6 +41,7 @@ router.post('/:id/entries', (req, res) => {
   try {
     //TODO: Add validation for entry data
     //TODO: Concat new entry to patient data if validation and parsing passes
+    addEntry(req.params.id, req.body);
 
   } catch (error: unknown) {
     let errorMsg = 'Error ';

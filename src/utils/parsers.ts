@@ -1,6 +1,7 @@
-import { Gender, NewPatient, Diagnosis, Patient } from "../types";
+import { Gender, NewPatient, Diagnosis, Patient, Entry } from "../types";
 import { isString, isDate, isGender } from './validators';
 
+// Patient parsers
 const parseName = (name: unknown): string => {
   if (!name || !isString(name)) {
     throw new Error('Incorrect or missing name');
@@ -33,11 +34,26 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation;
 };
 
+// Entry parsers
 const parseDiagnosisCodes = (object: unknown): Array<Diagnosis['code']> => {
   if (!object || typeof object !== 'object' || !('diagnosisCodes' in object)) {
     return [] as Array<Diagnosis['code']>;
   }
   return object.diagnosisCodes as Array<Diagnosis['code']>;
+};
+
+const parseEntryDescription = (description: unknown): string => {
+  if (!description || !isString(description)) {
+    throw new Error('Incorrect or missing description');
+  }
+  return description;
+};
+
+const parseEntrySpecialist = (specialist: unknown): string => {
+  if (!specialist || !isString(specialist)) {
+    throw new Error('Incorrect or missing specialist');
+  }
+  return specialist;
 };
 
 export const toNewPatientEntry = (object: unknown): NewPatient => {
@@ -60,3 +76,18 @@ export const toNewPatientEntry = (object: unknown): NewPatient => {
 //TODO: parse an entry object
 // Should return an entry object that can be concatinated to
 // existing array of entries in patient data
+export const toNewEntry = (object: unknown): Entry => {
+  if (!object || typeof object !== 'object') {
+    throw new Error('Incorrect or missing data');
+  }
+  if ('description' in object && 'date' in object && 'specialist' in object) {
+    const newEntry: Entry = {
+      description: parseEntryDescription(object.description),
+      date: parseDate(object.date),
+      specialist: parseEntrySpecialist(object.specialist),
+      diagnosisCodes: parseDiagnosisCodes(object)
+    };
+    return newEntry;
+  }
+  throw new Error('Incorrect data: some fields are missing');
+};
