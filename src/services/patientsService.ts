@@ -1,7 +1,7 @@
 import { v1 as uuid } from 'uuid';
 
 import data from "../data/patientData";
-import { Entry, NewEntry, NewPatient, Patient, PatientNoSsn } from "../types";
+import { Entry, NewEntryNoId, NewPatient, Patient, PatientNoSsn } from "../types";
 
 const patients: PatientNoSsn[] = data;
 
@@ -23,7 +23,7 @@ export const addPatient = (newPatient: NewPatient): Patient => {
   return addedPatient;
 };
 
-export const addEntry = (id: string, entry: NewEntry) => {
+export const addEntry = (id: string, entry: NewEntryNoId) => {
   const patient = getPatientById(id);
   if (!patient) {
     throw new Error('No patient with given id exists');
@@ -31,5 +31,5 @@ export const addEntry = (id: string, entry: NewEntry) => {
   const entryId: string = uuid();
   const newEntry: Entry = { ...entry, id: entryId };
   patient.entries = patient.entries ? patient.entries.concat(newEntry) : [newEntry];
-  return patient;
+  return newEntry;
 };
