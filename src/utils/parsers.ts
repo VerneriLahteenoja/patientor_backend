@@ -1,4 +1,4 @@
-import { Gender, NewPatient, Diagnosis, Patient, Entry } from "../types";
+import { Gender, NewPatient, Diagnosis, BaseEntryNoId, NewEntryNoId } from "../types";
 import { isString, isDate, isGender } from './validators';
 
 // Patient parsers
@@ -73,21 +73,44 @@ export const toNewPatientEntry = (object: unknown): NewPatient => {
   throw new Error('Incorrect data: some fields are missing');
 };
 
-//TODO: parse an entry object
-// Should return an entry object that can be concatinated to
-// existing array of entries in patient data
-export const toNewEntry = (object: unknown): Entry => {
+
+export const toNewEntry = (object: unknown): NewEntryNoId => {
   if (!object || typeof object !== 'object') {
     throw new Error('Incorrect or missing data');
   }
-  if ('description' in object && 'date' in object && 'specialist' in object) {
-    const newEntry: Entry = {
+
+  if ('description' in object && 'date' in object && 'specialist' in object && 'type' in object) {
+
+    const baseNewEntry: BaseEntryNoId = {
       description: parseEntryDescription(object.description),
       date: parseDate(object.date),
       specialist: parseEntrySpecialist(object.specialist),
       diagnosisCodes: parseDiagnosisCodes(object)
     };
-    return newEntry;
+
+    switch (object.type) {
+      case 'HealthCheck':
+        return {
+          ...baseNewEntry,
+          type: 'HealthCheck',
+          healthCheckRating: parseHealthCheckRating(object.healthCheckRating) //TODO: Implement this parser
+        };
+      case 'OccupationalHealthcare':
+        return {
+          ...baseNewEntry,
+          type: 'OccupationalHealthcare',
+          employerName: parseEmployerName(object.employerName), //TODO: Implement this parser
+          sickLeave: parseSickLeave(object.sickLeave) //TODO: Implement this parser
+        };
+      case 'Hospital':
+        return {
+          ...baseNewEntry,
+          type: 'Hospital',
+          discharge: parseDischarge(object.discharge) //TODO: Implement this parser
+        };
+      default:
+        throw new Error(`Incorrect or missing entry type ${object.type}`);
+    }
   }
   throw new Error('Incorrect data: some fields are missing');
 };
