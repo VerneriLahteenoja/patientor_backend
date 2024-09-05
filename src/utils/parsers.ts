@@ -106,12 +106,15 @@ export const toNewEntry = (object: unknown): NewEntryNoId => {
         }
         throw new Error('Missing healthCheckRating for HealthCheckEntry');
       case 'OccupationalHealthcare':
-        return {
-          ...baseNewEntry,
-          type: 'OccupationalHealthcare',
-          employerName: parseEmployerName(object.employerName), //TODO: Implement this parser
-          sickLeave: parseSickLeave(object.sickLeave) //TODO: Implement this parser
-        };
+        if ('employerName' in object && 'sickLeave' in object) {
+          return {
+            ...baseNewEntry,
+            type: 'OccupationalHealthcare',
+            employerName: parseEmployerName(object.employerName), //TODO: Implement this parser
+            sickLeave: parseSickLeave(object.sickLeave) //TODO: Implement this parser
+          };
+        }
+        throw new Error('Incorrect data: Missing fields emplyerName and/or sickLeave');
       case 'Hospital':
         return {
           ...baseNewEntry,

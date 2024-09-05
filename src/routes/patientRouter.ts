@@ -36,7 +36,7 @@ router.post('/', (req, res) => {
 router.post('/:id/entries', (req, res) => {
   const patient = getPatientById(req.params.id);
   if (!patient) {
-    return res.json(400).json({ error: 'No patient with given id exists' })
+    return res.json(400).json({ error: 'No patient with given id exists' });
   }
   try {
     //TODO: Add validation for entry data
@@ -51,7 +51,7 @@ router.post('/:id/entries', (req, res) => {
     res.status(400).send(errorMsg);
   }
   return res.status(400).json({ error: 'Something went wrong' });
-})
+});
 
 
 export default router;
