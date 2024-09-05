@@ -114,13 +114,16 @@ export const toNewEntry = (object: unknown): NewEntryNoId => {
             sickLeave: parseSickLeave(object.sickLeave) //TODO: Implement this parser
           };
         }
-        throw new Error('Incorrect data: Missing fields emplyerName and/or sickLeave');
+        throw new Error('Incorrect or missing emplyerName and/or sickLeave');
       case 'Hospital':
-        return {
-          ...baseNewEntry,
-          type: 'Hospital',
-          discharge: parseDischarge(object.discharge) //TODO: Implement this parser
-        };
+        if ('discharge' in object) {
+          return {
+            ...baseNewEntry,
+            type: 'Hospital',
+            discharge: parseDischarge(object.discharge) //TODO: Implement this parser
+          };
+        }
+        throw new Error('Incorrect or missing discharge');
       default:
         throw new Error(`Incorrect or missing entry type ${object.type}`);
     }
