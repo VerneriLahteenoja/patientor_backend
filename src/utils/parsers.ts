@@ -1,5 +1,5 @@
 import { Gender, NewPatient, Diagnosis, BaseEntryNoId, NewEntryNoId } from "../types";
-import { isString, isDate, isGender } from './validators';
+import { isString, isNumber, isDate, isGender, isHealthCheckRating } from './validators';
 
 // Patient parsers
 const parseName = (name: unknown): string => {
@@ -56,6 +56,13 @@ const parseEntrySpecialist = (specialist: unknown): string => {
   return specialist;
 };
 
+const parseHealthCheckRating = (healthCheckRating: unknown): number => {
+  if (!healthCheckRating || !isNumber(healthCheckRating)) {
+    throw new Error('Incorrect or missing health check rating');
+  }
+  return healthCheckRating;
+}
+
 export const toNewPatientEntry = (object: unknown): NewPatient => {
   if (!object || typeof object !== 'object') {
     throw new Error('Incorrect or missing data');
@@ -90,11 +97,14 @@ export const toNewEntry = (object: unknown): NewEntryNoId => {
 
     switch (object.type) {
       case 'HealthCheck':
-        return {
-          ...baseNewEntry,
-          type: 'HealthCheck',
-          healthCheckRating: parseHealthCheckRating(object.healthCheckRating) //TODO: Implement this parser
-        };
+        if ('healthCheckRating' in object) {
+          return  {
+            ...baseNewEntry,
+            type: 'HealthCheck',
+            healthCheckRating: parseHealthCheckRating(object.healthCheckRating)
+          };
+        }
+        throw new Error('Missing healthCheckRating for HealthCheckEntry');
       case 'OccupationalHealthcare':
         return {
           ...baseNewEntry,
