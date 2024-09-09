@@ -1,5 +1,5 @@
-import { Gender, NewPatient, Diagnosis, BaseEntryNoId, NewEntryNoId } from "../types";
-import { isString, isNumber, isDate, isGender, isHealthCheckRating } from './validators';
+import { Gender, NewPatient, Diagnosis, BaseEntryNoId, NewEntryNoId, SickLeave } from "../types";
+import { isString, isNumber, isDate, isGender, isHealthCheckRating, isObject } from './validators';
 
 // Patient parsers
 const parseName = (name: unknown): string => {
@@ -61,7 +61,33 @@ const parseHealthCheckRating = (healthCheckRating: unknown): number => {
     throw new Error('Incorrect or missing health check rating');
   }
   return healthCheckRating;
-}
+};
+
+const parseEmployerName = (employerName: unknown): string => {
+  if (!employerName || !isString(employerName)) {
+    throw new Error('Incorrect or missing employer name');
+  }
+  return employerName;
+};
+
+const parseSickLeave = (sickLeave: unknown): SickLeave => {
+  // Could move some of this into a sickLeave validator
+  // Check if object, has required fields, and if those fields are strings and dates
+  if (!sickLeave || !isObject(sickLeave) || 
+    !('startDate' in sickLeave) || 
+    !('endDate' in sickLeave) ||
+    typeof sickLeave.startDate !== 'string' ||
+    typeof sickLeave.endDate !== 'string' ||
+    !isDate(sickLeave.startDate) ||
+    !isDate(sickLeave.endDate)) {
+    
+    throw new Error('Incorrect or missing sick leave');
+  }
+  return {
+    startDate: sickLeave.startDate,
+    endDate: sickLeave.endDate
+  } as SickLeave;
+};
 
 export const toNewPatientEntry = (object: unknown): NewPatient => {
   if (!object || typeof object !== 'object') {
