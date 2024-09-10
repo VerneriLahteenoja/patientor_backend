@@ -1,4 +1,4 @@
-import { Gender, NewPatient, Diagnosis, BaseEntryNoId, NewEntryNoId, SickLeave } from "../types";
+import { Gender, NewPatient, Diagnosis, BaseEntryNoId, NewEntryNoId, SickLeave, Discharge } from "../types";
 import { isString, isNumber, isDate, isGender, isHealthCheckRating, isObject } from './validators';
 
 // Patient parsers
@@ -86,6 +86,16 @@ const parseSickLeave = (sickLeave: unknown): SickLeave => {
   return sickLeave as SickLeave;
 };
 
+const parseDischarge = (discharge: unknown): Discharge => {
+  if (!discharge || !isObject(discharge) ||
+    (!('date' in discharge)) ||
+    (!('criteria' in discharge)) ||
+    typeof discharge.date !== 'string' ||
+    typeof discharge.criteria !== 'string' ||
+    !isDate(discharge.date)) {
+    throw new Error('Incorrect or missing discharge');
+    }
+  return discharge as Discharge;
 };
 
 export const toNewPatientEntry = (object: unknown): NewPatient => {
@@ -135,8 +145,8 @@ export const toNewEntry = (object: unknown): NewEntryNoId => {
           return {
             ...baseNewEntry,
             type: 'OccupationalHealthcare',
-            employerName: parseEmployerName(object.employerName), //TODO: Implement this parser
-            sickLeave: parseSickLeave(object.sickLeave) //TODO: Implement this parser
+            employerName: parseEmployerName(object.employerName),
+            sickLeave: parseSickLeave(object.sickLeave)
           };
         }
         throw new Error('Incorrect or missing emplyerName and/or sickLeave');
@@ -145,7 +155,7 @@ export const toNewEntry = (object: unknown): NewEntryNoId => {
           return {
             ...baseNewEntry,
             type: 'Hospital',
-            discharge: parseDischarge(object.discharge) //TODO: Implement this parser
+            discharge: parseDischarge(object.discharge)
           };
         }
         throw new Error('Incorrect or missing discharge');
