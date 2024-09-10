@@ -83,10 +83,9 @@ const parseSickLeave = (sickLeave: unknown): SickLeave => {
     
     throw new Error('Incorrect or missing sick leave');
   }
-  return {
-    startDate: sickLeave.startDate,
-    endDate: sickLeave.endDate
-  } as SickLeave;
+  return sickLeave as SickLeave;
+};
+
 };
 
 export const toNewPatientEntry = (object: unknown): NewPatient => {
