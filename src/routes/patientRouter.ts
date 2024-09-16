@@ -39,10 +39,8 @@ router.post('/:id/entries', (req, res) => {
     return res.json(400).json({ error: 'No patient with given id exists' });
   }
   try {
-    //TODO: Add validation for entry data
-    //TODO: Concat new entry to patient data if validation and parsing passes
+    toNewPatientEntry(req.body);
     addEntry(req.params.id, req.body);
-
   } catch (error: unknown) {
     let errorMsg = 'Error ';
     if (error instanceof Error) {
