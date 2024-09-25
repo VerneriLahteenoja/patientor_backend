@@ -20,6 +20,7 @@ export const isGender = (gender: string): gender is Gender => {
   return Object.values(Gender).map(g => g.toString()).includes(gender);
 };
 
+//TODO: Something is not right here
 export const isHealthCheckRating = (rating: number): rating is HealthCheckRating => {
   return Object.values(HealthCheckRating).includes(Number(rating));
 };
