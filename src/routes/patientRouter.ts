@@ -28,7 +28,7 @@ router.post('/', (req, res) => {
     if (error instanceof Error) {
       errorMsg += error.message;
     }
-    res.status(400).send(errorMsg);
+    return res.status(400).send(errorMsg);
   }
   return res.status(400).json({ error: 'Something went wrong' });
 });
@@ -46,7 +46,7 @@ router.post('/:id/entries', (req, res) => {
     if (error instanceof Error) {
       errorMsg += error.message;
     }
-    res.status(400).send(errorMsg);
+    return res.status(400).send(errorMsg);
   }
   return res.status(400).json({ error: 'Something went wrong' });
 });
