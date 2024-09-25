@@ -1,7 +1,7 @@
 import express from "express";
 
 import { addPatient, getPatients, getPatientById, addEntry } from "../services/patientsService";
-import { toNewPatientEntry } from "../utils/parsers";
+import { toNewPatientEntry, toNewEntry } from "../utils/parsers";
 
 const router = express.Router();
 
@@ -30,7 +30,6 @@ router.post('/', (req, res) => {
     }
     return res.status(400).send(errorMsg);
   }
-  return res.status(400).json({ error: 'Something went wrong' });
 });
 
 router.post('/:id/entries', (req, res) => {
@@ -39,7 +38,8 @@ router.post('/:id/entries', (req, res) => {
     return res.json(400).json({ error: 'No patient with given id exists' });
   }
   try {
-    toNewPatientEntry(req.body);
+    console.log(req.body)
+    toNewEntry(req.body);
     addEntry(req.params.id, req.body);
   } catch (error: unknown) {
     let errorMsg = 'Error ';
