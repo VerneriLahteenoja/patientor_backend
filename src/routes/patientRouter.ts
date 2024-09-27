@@ -38,9 +38,9 @@ router.post('/:id/entries', (req, res) => {
     return res.json(400).json({ error: 'No patient with given id exists' });
   }
   try {
-    console.log(req.body)
-    toNewEntry(req.body);
-    addEntry(req.params.id, req.body);
+    const newEntry = toNewEntry(req.body);
+    const addedEntry = addEntry(req.params.id, newEntry);
+    return res.status(201).json(addedEntry);
   } catch (error: unknown) {
     let errorMsg = 'Error ';
     if (error instanceof Error) {
@@ -48,7 +48,6 @@ router.post('/:id/entries', (req, res) => {
     }
     return res.status(400).send(errorMsg);
   }
-  return res.status(400).json({ error: 'Something went wrong' });
 });
 
 
