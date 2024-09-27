@@ -22,5 +22,5 @@ export const isGender = (gender: string): gender is Gender => {
 
 //TODO: Something is not right here
 export const isHealthCheckRating = (rating: number): rating is HealthCheckRating => {
-  return Object.values(HealthCheckRating).includes(Number(rating));
+  return Object.values(HealthCheckRating).map(r => Number(r)).includes(rating);
 };
