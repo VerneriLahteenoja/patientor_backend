@@ -57,7 +57,7 @@ const parseEntrySpecialist = (specialist: unknown): string => {
 };
 
 const parseHealthCheckRating = (healthCheckRating: unknown): number => {
-  if (!healthCheckRating || !isNumber(healthCheckRating) || !isHealthCheckRating(healthCheckRating)) {
+  if (!isNumber(healthCheckRating) || !isHealthCheckRating(healthCheckRating)) {
     throw new Error('Incorrect or missing health check rating');
   }
   return healthCheckRating;
